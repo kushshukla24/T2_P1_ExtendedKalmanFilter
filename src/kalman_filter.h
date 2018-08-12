@@ -51,7 +51,7 @@ public:
    * @param delta_T Time between k and k+1 in s
    */
   void Predict();
-
+  
   /**
    * Updates the state by using standard Kalman Filter equations
    * @param z The measurement at k+1
@@ -63,6 +63,13 @@ public:
    * @param z The measurement at k+1
    */
   void UpdateEKF(const Eigen::VectorXd &z);
+
+private:
+  /**
+   * Updates the state by using standard Kalman Filter equations
+   * @param y The error between the predicted and measured
+   */
+  void RegularUpdate(const Eigen::VectorXd &y);
 
 };
 

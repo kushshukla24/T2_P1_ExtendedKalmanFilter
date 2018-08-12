@@ -2,6 +2,7 @@
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
+using std::max;
 
 // Please note that the Eigen library does not initialize 
 // VectorXd or MatrixXd objects with zeros upon creation.
@@ -25,18 +26,15 @@ void KalmanFilter::Predict() {
   TODO:
     * predict the state
   */
-	x_ = F_ * x_;
-	MatrixXd Ft = F_.transpose();
-	P_ = F_ * P_ * Ft + Q_;
+  x_ = F_ * x_;
+  P_ = F_ * P_ * (F_.transpose()) + Q_;
 }
 
-void KalmanFilter::Update(const VectorXd &z) {
+void KalmanFilter::RegularUpdate(const VectorXd &y) {
   /**
   TODO:
     * update the state by using Kalman Filter equations
   */
-	VectorXd z_pred = H_ * x_;
-	VectorXd y = z - z_pred;
 	MatrixXd Ht = H_.transpose();
 	MatrixXd S = H_ * P_ * Ht + R_;
 	MatrixXd Si = S.inverse();
@@ -50,9 +48,33 @@ void KalmanFilter::Update(const VectorXd &z) {
 	P_ = (I - K * H_) * P_;
 }
 
+void KalmanFilter::Update(const VectorXd &z) {
+  /**
+  TODO:
+    * update the state by using Kalman Filter equations
+  */
+	RegularUpdate(z - (H_ * x_));
+}
+
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
   /**
   TODO:
     * update the state by using Extended Kalman Filter equations
   */
+
+  VectorXd z_pred(3);
+  double rho = sqrt((x_(0)*x_(0)) + (x_(1)*x_(1)));
+  z_pred << rho                                             ,
+            atan2(x_(1),x_(0))                              ,
+            ((x_(0)*x_(2))+(x_(1)*x_(3)))/ max(rho, 0.0001) ;
+
+  VectorXd y = z - z_pred;
+
+  while(y(1) > M_PI)
+    y(1) -= 2*M_PI;
+
+  while(y(1) < -M_PI)
+    y(1) += 2*M_PI;
+  
+  RegularUpdate(y);
 }
