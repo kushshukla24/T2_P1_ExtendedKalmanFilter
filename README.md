@@ -1,5 +1,4 @@
 # Extended Kalman Filter Project
-Self-Driving Car Engineer Nanodegree Program
 This repository contains the C++ source code for Udacity Self Driving Car Nanodegree Term 2 Project 1
 
 ## Project Description
