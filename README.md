@@ -24,3 +24,8 @@ On windows, you may need to run: cmake .. -G "Unix Makefiles" && make
 - Run it: ./ExtendedKF path/to/input.txt path/to/output.txt. You can find some sample inputs in 'data/'.
 eg. ./ExtendedKF ../data/sample-laser-radar-measurement-data-1.txt output.txt
 
+## Results for the input data ../data/sample-laser-radar-measurement-data-1.txt
+X : 0.0973
+Y : 0.0853
+VX: 0.4514
+VY: 0.4399
