@@ -38,8 +38,7 @@ void KalmanFilter::RegularUpdate(const VectorXd &y) {
 	MatrixXd Ht = H_.transpose();
 	MatrixXd S = H_ * P_ * Ht + R_;
 	MatrixXd Si = S.inverse();
-	MatrixXd PHt = P_ * Ht;
-	MatrixXd K = PHt * Si;
+	MatrixXd K = P_ * Ht * Si;
 
 	//new estimate
 	x_ = x_ + (K * y);
